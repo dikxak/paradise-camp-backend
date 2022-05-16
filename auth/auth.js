@@ -1,4 +1,5 @@
 const jwt = require('jsonwebtoken');
+const dotenv = require('dotenv');
 const User = require('../models/userModel');
 
 const userGuard = async (req, res, next) => {
@@ -10,7 +11,7 @@ const userGuard = async (req, res, next) => {
       throw new Error('Not Authorized, No Token');
     }
 
-    const decodedData = jwt.verify(token, 'dikxak');
+    const decodedData = jwt.verify(token, process.env.JWT_SECRET);
 
     if (!decodedData) return;
 
