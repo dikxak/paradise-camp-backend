@@ -5,7 +5,6 @@ app.use(express.json());
 
 require('./database/connection');
 
-const customerBookRoute = require('./routers/customerSignUpRoute');
-app.use(customerBookRoute);
+app.use('/users', require('./routes/userRoutes'));
 
 app.listen(90);
