@@ -4,6 +4,8 @@ const User = require('../models/userModel');
 
 const userGuard = async (req, res, next) => {
   try {
+    if (req.headers.authorization) throw new Error('No any token value');
+
     const token = req.headers.authorization.split(' ')[1];
 
     if (!token) {
