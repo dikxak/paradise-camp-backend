@@ -49,6 +49,29 @@ const registerUser = async (req, res) => {
   }
 };
 
+const loginUser = async (req, res) => {
+  try {
+    const { email, password } = req.body;
+
+    const user = await User.findOne({ email });
+
+    if (user && (await bcrypt.compare(password, user.password))) {
+      res.json({
+        _id: user.id,
+        firstName: user.firstName,
+        lastName: user.lastName,
+        email: user.email,
+        token: generateToken(user._id),
+      });
+    } else {
+      res.status(400);
+      throw new Error('Invalid Credentials');
+    }
+  } catch (err) {
+    res.json({ message: err.message, stack: err.stack });
+  }
+};
+
 // Generate JWT
 const generateToken = id => {
   return jwt.sign({ id }, 'dikxak', {
@@ -56,4 +79,4 @@ const generateToken = id => {
   });
 };
 
-module.exports = { registerUser };
+module.exports = { registerUser, loginUser };
