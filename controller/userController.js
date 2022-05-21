@@ -81,7 +81,6 @@ const uploadLocationImage = async (req, res) => {
     if (!req.file) throw new Error('File type not supported');
 
     const spotData = await Spot.find({ userId: req.user._id });
-    console.log(spotData);
 
     await Spot.updateOne(
       { id: spotData._id },
