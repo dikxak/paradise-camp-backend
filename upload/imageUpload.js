@@ -1,7 +1,14 @@
 const multer = require('multer');
+const fs = require('fs');
+
+const folderPath = './images';
 
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
+    // If "images" folder doesn't exists, create one
+    if (!fs.existsSync(folderPath)) {
+      fs.mkdirSync(folderPath);
+    }
     cb(null, './images');
   },
   filename: (req, file, cb) => {
