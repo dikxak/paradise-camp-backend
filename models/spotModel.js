@@ -21,6 +21,8 @@ const SpotModel = new mongoose.Schema({
   longitude: { type: String, required: true },
   phoneNo: { type: String, required: true },
   email: { type: String, required: true },
+  price: { type: Number, required: true },
+  description: { type: String, required: true },
   userId: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'User',

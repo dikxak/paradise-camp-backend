@@ -18,6 +18,8 @@ const addSpot = async (req, res) => {
       longitude,
       email,
       phoneNo,
+      price,
+      description,
     } = req.body;
 
     if (
@@ -27,7 +29,9 @@ const addSpot = async (req, res) => {
       !latitude ||
       !longitude ||
       !email ||
-      !phoneNo
+      !phoneNo ||
+      !price ||
+      !description
     ) {
       res.status(400);
       throw new Error('Please fill all the fields.');
@@ -48,6 +52,8 @@ const addSpot = async (req, res) => {
       longitude,
       phoneNo,
       email,
+      price,
+      description,
       userId: user._id,
     });
 
@@ -61,6 +67,8 @@ const addSpot = async (req, res) => {
         longitude: spotData.longitude,
         email: spotData.email,
         phoneNo: spotData.phoneNo,
+        price: spotData.price,
+        description: spotData.description,
         userId: spotData.userId,
       });
     } else {
