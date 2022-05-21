@@ -8,4 +8,6 @@ require('./database/connection');
 
 app.use('/users', require('./routes/userRoutes'));
 
+app.use('/spot', require('./routes/spotRoutes'));
+
 app.listen(process.env.PORT || 90);
