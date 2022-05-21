@@ -1,5 +1,4 @@
 const Spot = require('../models/spotModel');
-const userModel = require('../models/userModel');
 const spotModel = require('../models/spotModel');
 
 const addSpot = async (req, res) => {
