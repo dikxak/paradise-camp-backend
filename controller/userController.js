@@ -99,8 +99,10 @@ const getLocationImage = (req, res) => {
 
   const { filename } = req.params;
 
+  if (!fs.existsSync('./images'))
+    return res.json({ message: 'No directory named images' });
+
   if (
-    !fs.existsSync('./images') &&
     !fs.existsSync(`./images/${filename}.jpg`) &&
     !fs.existsSync(`./images/${filename}.png`) &&
     !fs.existsSync(`./images/${filename}.gif`)
