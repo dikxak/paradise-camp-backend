@@ -2,6 +2,9 @@ const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const dotenv = require('dotenv');
 const User = require('../models/userModel');
+const Spot = require('../models/spotModel');
+const path = require('path');
+const fs = require('fs');
 
 const registerUser = async (req, res) => {
   try {
@@ -73,6 +76,43 @@ const loginUser = async (req, res) => {
   }
 };
 
+const uploadLocationImage = async (req, res) => {
+  try {
+    if (!req.file) throw new Error('File type not supported');
+
+    const spotData = await Spot.find({ userId: req.user._id });
+    console.log(spotData);
+
+    await Spot.updateOne(
+      { id: spotData._id },
+      { imageURL: `http://localhost:90/users/image/${req.file.filename}` }
+    );
+
+    res.json({ message: 'Image uploaded successfully' });
+  } catch (err) {
+    res.json({ error: err.message });
+  }
+};
+
+// Get the image from URL
+const getLocationImage = (req, res) => {
+  if (!req.user) return res.json({ message: 'Not authorized.' });
+
+  const { filename } = req.params;
+
+  if (
+    !fs.existsSync('./images') &&
+    !fs.existsSync(`./images/${filename}.jpg`) &&
+    !fs.existsSync(`./images/${filename}.png`) &&
+    !fs.existsSync(`./images/${filename}.gif`)
+  )
+    return res.json({ message: 'No such file or directory' });
+
+  res.sendFile(`${filename}.jpg`, {
+    root: path.join(__dirname, '../images'),
+  });
+};
+
 // Generate JWT
 const generateToken = id => {
   return jwt.sign({ id }, process.env.JWT_SECRET, {
@@ -80,4 +120,9 @@ const generateToken = id => {
   });
 };
 
-module.exports = { registerUser, loginUser };
+module.exports = {
+  registerUser,
+  loginUser,
+  uploadLocationImage,
+  getLocationImage,
+};
