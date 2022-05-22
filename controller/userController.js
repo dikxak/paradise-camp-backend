@@ -94,6 +94,22 @@ const getUser = async (req, res) => {
   }
 };
 
+const updateUser = async (req, res) => {
+  try {
+    const userId = req.user.id;
+
+    if (!userId) throw new Error("User doesn't exists.");
+
+    const updatedUserData = await User.findByIdAndUpdate(userId, req.body, {
+      new: true,
+    });
+
+    res.json({ updatedUserData: updatedUserData });
+  } catch (err) {
+    res.json({ errorMessage: err.message });
+  }
+};
+
 const uploadLocationImage = async (req, res) => {
   try {
     if (!req.file) throw new Error('File type not supported');
@@ -143,6 +159,7 @@ module.exports = {
   registerUser,
   loginUser,
   getUser,
+  updateUser,
   uploadLocationImage,
   getLocationImage,
 };

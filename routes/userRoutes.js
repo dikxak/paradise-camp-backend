@@ -7,9 +7,13 @@ const {
   registerUser,
   loginUser,
   getUser,
+  updateUser,
   uploadLocationImage,
   getLocationImage,
 } = require('../controller/userController');
+
+// Get User
+router.get('/me', userGuard, getUser);
 
 // Customer Register
 router.post('/register', registerUser);
@@ -17,8 +21,8 @@ router.post('/register', registerUser);
 // Customer login
 router.post('/login', loginUser);
 
-// Get User
-router.get('/me', userGuard, getUser);
+// Update User
+router.route('/update').put(userGuard, updateUser);
 
 // img - for postman
 router
