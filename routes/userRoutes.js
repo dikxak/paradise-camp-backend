@@ -6,6 +6,7 @@ const upload = require('../upload/imageUpload');
 const {
   registerUser,
   loginUser,
+  getUser,
   uploadLocationImage,
   getLocationImage,
 } = require('../controller/userController');
@@ -15,6 +16,9 @@ router.post('/register', registerUser);
 
 // Customer login
 router.post('/login', loginUser);
+
+// Get User
+router.get('/me', userGuard, getUser);
 
 // img - for postman
 router

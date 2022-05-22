@@ -76,6 +76,24 @@ const loginUser = async (req, res) => {
   }
 };
 
+const getUser = async (req, res) => {
+  try {
+    const userId = req.user.id;
+
+    // Get all user information except password
+    const userData = await User.findById(userId).select('-password');
+
+    if (userData) {
+      res.status(200);
+      res.json({ userData: userData });
+    } else {
+      throw new Error("User doesn't exists.");
+    }
+  } catch (err) {
+    res.json({ errorMessage: err.message });
+  }
+};
+
 const uploadLocationImage = async (req, res) => {
   try {
     if (!req.file) throw new Error('File type not supported');
@@ -124,6 +142,7 @@ const generateToken = id => {
 module.exports = {
   registerUser,
   loginUser,
+  getUser,
   uploadLocationImage,
   getLocationImage,
 };
