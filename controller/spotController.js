@@ -114,4 +114,36 @@ const updateSpot = async (req, res) => {
   }
 };
 
-module.exports = { addSpot, updateSpot };
+const deleteSpot = async (req, res) => {
+  try {
+    const spotId = req.params.id;
+
+    // Check for spot
+    const spotData = await Spot.findById(spotId);
+    if (!spotData) {
+      res.status(400);
+      throw new Error('No Spot Found');
+    }
+
+    // Check for user
+    const user = await User.findById(req.user.id);
+    if (!user) {
+      res.status(401);
+      throw new Error('User Not Found');
+    }
+    console.log(user);
+
+    // Make sure the logged in user matches the user with spot user
+    if (spotData.userId.toString() !== user.id) {
+      res.status(401);
+      throw new Error('User Not Authorized');
+    }
+
+    await Spot.deleteOne({ _id: spotId });
+    res.status(200).json({ spotId: spotId });
+  } catch (err) {
+    res.json({ error: err.message });
+  }
+};
+
+module.exports = { addSpot, updateSpot, deleteSpot };
