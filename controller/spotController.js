@@ -1,6 +1,18 @@
 const Spot = require('../models/spotModel');
 const User = require('../models/userModel');
 
+const getSpot = async (req, res) => {
+  try {
+    const userId = req.user.id;
+
+    const spotData = await Spot.find({ userId: userId });
+
+    res.send({ spotData: spotData });
+  } catch (err) {
+    res.send({ errorMessage: err.message });
+  }
+};
+
 const addSpot = async (req, res) => {
   try {
     const user = req.user;
@@ -144,4 +156,4 @@ const deleteSpot = async (req, res) => {
   }
 };
 
-module.exports = { addSpot, updateSpot, deleteSpot };
+module.exports = { addSpot, updateSpot, deleteSpot, getSpot };
