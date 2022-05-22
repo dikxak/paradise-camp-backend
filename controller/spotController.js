@@ -97,7 +97,6 @@ const updateSpot = async (req, res) => {
       res.status(401);
       throw new Error('User Not Found');
     }
-    console.log(user);
 
     // Make sure the logged in user matches the user with spot user
     if (spotData.userId.toString() !== user.id) {
@@ -131,7 +130,6 @@ const deleteSpot = async (req, res) => {
       res.status(401);
       throw new Error('User Not Found');
     }
-    console.log(user);
 
     // Make sure the logged in user matches the user with spot user
     if (spotData.userId.toString() !== user.id) {
