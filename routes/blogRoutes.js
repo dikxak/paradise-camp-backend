@@ -6,10 +6,12 @@ const {
   addBlog,
   getBlog,
   updateBlog,
+  deleteBlog,
 } = require('../controller/blogController');
 
 router.route('/').get(userGuard, getBlog);
 router.route('/add').post(userGuard, addBlog);
 router.route('/update/:id').put(userGuard, updateBlog);
+router.route('/delete/:id').delete(userGuard, deleteBlog);
 
 module.exports = router;
