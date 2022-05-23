@@ -8,6 +8,10 @@ require('./database/connection');
 
 app.use('/users', require('./routes/userRoutes'));
 
-app.use('/spot', require('./routes/spotRoutes'));
+app.use('/spots', require('./routes/spotRoutes'));
+
+app.use('/bookings', require('./routes/bookingRoutes'));
+
+app.use('/blogs', require('./routes/blogRoutes'));
 
 app.listen(process.env.PORT || 90);
