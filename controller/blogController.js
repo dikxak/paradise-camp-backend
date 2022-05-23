@@ -1,4 +1,5 @@
 const Blog = require('../models/blogModel');
+
 const User = require('../models/userModel');
 
 const getBlog = async (req, res) => {
@@ -54,4 +55,37 @@ const addBlog = async (req, res) => {
   }
 };
 
-module.exports = { getBlog, addBlog };
+const updateBlog = async (req, res) => {
+  try {
+    const blogId = req.params.id;
+
+    const blogData = await Blog.findById(blogId);
+
+    if (!blogData) {
+      res.status(400);
+      throw new Error('No blog found');
+    }
+
+    const user = await User.findById(req.user.id);
+
+    if (!user) {
+      res.status(400);
+      throw new Error('User Not Found');
+    }
+
+    if (blogData.userId.toString() !== user.id) {
+      res.status(401);
+      throw new Error('User Not Authorized');
+    }
+
+    const updatedBlog = await Blog.findByIdAndUpdate(blogId, req.body, {
+      new: true,
+    });
+
+    res.status(200).json(updatedBlog);
+  } catch (err) {
+    res.json({ error: err.message });
+  }
+};
+
+module.exports = { getBlog, addBlog, updateBlog };
