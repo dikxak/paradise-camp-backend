@@ -1,6 +1,18 @@
 const Blog = require('../models/blogModel');
 const User = require('../models/userModel');
 
+const getBlog = async (req, res) => {
+  try {
+    const userId = req.user.id;
+
+    const blogData = await Blog.find({ userId: userId });
+
+    res.send({ blogData: blogData });
+  } catch (err) {
+    res.send({ errorMessage: err.message, stack: err.stack });
+  }
+};
+
 const addBlog = async (req, res) => {
   try {
     const user = req.user;
@@ -42,4 +54,4 @@ const addBlog = async (req, res) => {
   }
 };
 
-module.exports = { addBlog };
+module.exports = { getBlog, addBlog };
