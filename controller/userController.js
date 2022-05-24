@@ -147,7 +147,7 @@ const uploadBlogImage = async (req, res) => {
 
 // Get the image from URL
 const getUploadedImage = (req, res) => {
-  if (!req.user) return res.json({ message: 'Not authorized.' });
+  // if (!req.user) return res.json({ message: 'Not authorized.' });
 
   const { filename } = req.params;
 

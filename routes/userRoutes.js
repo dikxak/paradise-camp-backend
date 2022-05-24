@@ -36,6 +36,6 @@ router
   .route('/picture/upload/blog')
   .put(userGuard, upload.single('img'), uploadBlogImage);
 
-router.route('/image/:filename.jpg').get(userGuard, getUploadedImage);
+router.route('/image/:filename.jpg').get(getUploadedImage);
 
 module.exports = router;
