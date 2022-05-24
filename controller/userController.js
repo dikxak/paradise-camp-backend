@@ -3,6 +3,7 @@ const jwt = require('jsonwebtoken');
 const dotenv = require('dotenv');
 const User = require('../models/userModel');
 const Spot = require('../models/spotModel');
+const Blog = require('../models/blogModel');
 const path = require('path');
 const fs = require('fs');
 
@@ -127,8 +128,25 @@ const uploadLocationImage = async (req, res) => {
   }
 };
 
+const uploadBlogImage = async (req, res) => {
+  try {
+    if (!req.file) throw new Error('File type not supported');
+
+    const blogData = await Blog.find({ userId: req.user._id });
+
+    await Blog.updateOne(
+      { id: blogData._id },
+      { imageURL: `http://localhost:90/users/image/${req.file.filename}` }
+    );
+
+    res.json({ message: 'Image uploaded successfully' });
+  } catch (err) {
+    res.json({ error: err.message });
+  }
+};
+
 // Get the image from URL
-const getLocationImage = (req, res) => {
+const getUploadedImage = (req, res) => {
   if (!req.user) return res.json({ message: 'Not authorized.' });
 
   const { filename } = req.params;
@@ -161,5 +179,6 @@ module.exports = {
   getUser,
   updateUser,
   uploadLocationImage,
-  getLocationImage,
+  uploadBlogImage,
+  getUploadedImage,
 };

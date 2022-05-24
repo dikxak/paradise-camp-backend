@@ -9,7 +9,8 @@ const {
   getUser,
   updateUser,
   uploadLocationImage,
-  getLocationImage,
+  uploadBlogImage,
+  getUploadedImage,
 } = require('../controller/userController');
 
 // Get User
@@ -25,10 +26,16 @@ router.post('/login', loginUser);
 router.route('/update').put(userGuard, updateUser);
 
 // img - for postman
+// upload location image
 router
-  .route('/picture/upload')
+  .route('/picture/upload/location')
   .put(userGuard, upload.single('img'), uploadLocationImage);
 
-router.route('/image/:filename.jpg').get(userGuard, getLocationImage);
+// upload blog image
+router
+  .route('/picture/upload/blog')
+  .put(userGuard, upload.single('img'), uploadBlogImage);
+
+router.route('/image/:filename.jpg').get(userGuard, getUploadedImage);
 
 module.exports = router;
