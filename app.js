@@ -14,4 +14,6 @@ app.use('/bookings', require('./routes/bookingRoutes'));
 
 app.use('/blogs', require('./routes/blogRoutes'));
 
+app.use('/reviews', require('./routes/reviewRoutes'));
+
 app.listen(process.env.PORT || 90);
