@@ -1,6 +1,38 @@
 const Spot = require('../models/spotModel');
 const User = require('../models/userModel');
 
+// utility function to capitalize first letter.
+const getCapitalizedString = str => {
+  if (str.includes(' ')) {
+    return str
+      .split(' ')
+      .map(s => {
+        return s[0].toUpperCase() + s.substring(1);
+      })
+      .join(' ');
+  }
+  return str.split('')[0].toUpperCase() + str.substring(1);
+};
+
+const getSpotSearch = async (req, res) => {
+  try {
+    const spotName = req.params.name;
+
+    if (!spotName) {
+      res.status(400);
+      throw new Error('No spot name provided');
+    }
+
+    const spotData = await Spot.find({
+      $or: [{ name: { $regex: getCapitalizedString(spotName) } }],
+    }).select('-userId');
+
+    res.json({ spotData: spotData });
+  } catch (err) {
+    res.json({ error: err.message });
+  }
+};
+
 const getSpot = async (req, res) => {
   try {
     const userId = req.user.id;
@@ -156,4 +188,4 @@ const deleteSpot = async (req, res) => {
   }
 };
 
-module.exports = { addSpot, updateSpot, deleteSpot, getSpot };
+module.exports = { addSpot, updateSpot, deleteSpot, getSpot, getSpotSearch };
