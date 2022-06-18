@@ -40,6 +40,7 @@ const registerUser = async (req, res) => {
       res.status(200);
       res.json({
         _id: userData.id,
+        statusCode: 200,
         firstName: userData.firstName,
         lastName: userData.lastName,
         email: userData.email,
@@ -61,11 +62,8 @@ const loginUser = async (req, res) => {
     const user = await User.findOne({ email });
 
     if (user && (await bcrypt.compare(password, user.password))) {
+      res.status(200);
       res.json({
-        _id: user.id,
-        firstName: user.firstName,
-        lastName: user.lastName,
-        email: user.email,
         token: generateToken(user._id),
       });
     } else {
