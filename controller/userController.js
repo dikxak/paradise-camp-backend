@@ -38,6 +38,7 @@ const registerUser = async (req, res) => {
 
     if (userData) {
       res.status(200);
+
       res.json({
         _id: userData.id,
         statusCode: 200,
@@ -134,7 +135,7 @@ const uploadBlogImage = async (req, res) => {
 
     await Blog.updateOne(
       { id: blogData._id },
-      { imageURL: `http://localhost:90/users/image/${req.file.filename}` }
+      { imageURL: `http://localhost:90/images/${req.file.filename}` }
     );
 
     res.json({ message: 'Image uploaded successfully' });
@@ -143,26 +144,26 @@ const uploadBlogImage = async (req, res) => {
   }
 };
 
-// Get the image from URL
-const getUploadedImage = (req, res) => {
-  // if (!req.user) return res.json({ message: 'Not authorized.' });
+//Get the image from URL
+// const getUploadedImage = (req, res) => {
+//   // if (!req.user) return res.json({ message: 'Not authorized.' });
 
-  const { filename } = req.params;
+//   const { filename } = req.params;
 
-  if (!fs.existsSync('./images'))
-    return res.json({ message: 'No directory named images' });
+//   if (!fs.existsSync('./images'))
+//     return res.json({ message: 'No directory named images' });
 
-  if (
-    !fs.existsSync(`./images/${filename}.jpg`) &&
-    !fs.existsSync(`./images/${filename}.png`) &&
-    !fs.existsSync(`./images/${filename}.gif`)
-  )
-    return res.json({ message: 'No such file or directory' });
+//   if (
+//     !fs.existsSync(`./images/${filename}.jpg`) &&
+//     !fs.existsSync(`./images/${filename}.png`) &&
+//     !fs.existsSync(`./images/${filename}.gif`)
+//   )
+//     return res.json({ message: 'No such file or directory' });
 
-  res.sendFile(`${filename}.jpg`, {
-    root: path.join(__dirname, '../images'),
-  });
-};
+//   res.sendFile(`${filename}.jpg`, {
+//     root: path.join(__dirname, '../images'),
+//   });
+// };
 
 // Generate JWT
 const generateToken = id => {
@@ -178,5 +179,4 @@ module.exports = {
   updateUser,
   uploadLocationImage,
   uploadBlogImage,
-  getUploadedImage,
 };

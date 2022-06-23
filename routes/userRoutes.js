@@ -10,7 +10,7 @@ const {
   updateUser,
   uploadLocationImage,
   uploadBlogImage,
-  getUploadedImage,
+  // getUploadedImage,
 } = require('../controller/userController');
 
 // Get User
@@ -36,6 +36,6 @@ router
   .route('/picture/upload/blog')
   .put(userGuard, upload.single('img'), uploadBlogImage);
 
-router.route('/image/:filename.jpg').get(getUploadedImage);
+// router.route('/image/:filename.jpg').get(getUploadedImage);
 
 module.exports = router;
