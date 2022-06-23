@@ -25,9 +25,30 @@ const addBlog = async (req, res) => {
 
     const { title, description, writtenDate, subtitle } = req.body;
 
+    const imgFile = req.file;
+
     if (!title || !description || !writtenDate) {
       res.status(400);
       throw new Error('Please fill the required fields.');
+    }
+
+    if (!imgFile) {
+      res.send({ message: 'Please upload image.' });
+    }
+
+    if (imgFile) {
+      let basePath;
+      const fileName = imgFile.filename;
+
+      if (req.get('host').includes('10.0.2.2')) {
+        basePath = `${req.protocol}://${req
+          .get('host')
+          .replace('10.0.2.2', 'localhost')}/images/`;
+      } else {
+        basePath = `${req.protocol}://${req.get('host')}/images/`;
+      }
+
+      imageURL = basePath + fileName;
     }
 
     const blogData = await Blog.create({
@@ -35,16 +56,14 @@ const addBlog = async (req, res) => {
       description,
       writtenDate,
       subtitle,
+      imageURL,
       userId: req.user.id,
     });
 
     if (blogData) {
       res.status(200);
       res.json({
-        title: blogData.title,
-        description: blogData.description,
-        writtenDate: blogData.writtenDate,
-        userId: blogData.userId,
+        message: 'Blog added successfully.',
       });
     } else {
       res.status(400);
