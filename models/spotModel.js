@@ -13,6 +13,10 @@ const SpotModel = new mongoose.Schema({
     type: Number,
     required: true,
   },
+  type: {
+    type: String,
+    required: true,
+  },
   imageURL: {
     type: String,
     // required: true,

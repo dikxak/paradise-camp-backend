@@ -58,6 +58,7 @@ const addSpot = async (req, res) => {
       name,
       address,
       availableSpotNo,
+      type,
       latitude,
       longitude,
       email,
@@ -66,10 +67,20 @@ const addSpot = async (req, res) => {
       description,
     } = req.body;
 
+    const spotPresent = await Spot.findOne({ name });
+
+    if (spotPresent) {
+      res.status(400);
+      throw new Error('Spot name already exists.');
+    }
+
+    const imgFile = req.file;
+
     if (
       !name ||
       !address ||
       !availableSpotNo ||
+      !type ||
       !latitude ||
       !longitude ||
       !email ||
@@ -81,39 +92,44 @@ const addSpot = async (req, res) => {
       throw new Error('Please fill all the fields.');
     }
 
-    const spotPresent = await Spot.findOne({ name });
+    if (!imgFile) {
+      res.send({ message: 'Please upload image.' });
+    }
 
-    if (spotPresent) {
-      res.status(400);
-      throw new Error('Spot name already exists.');
+    if (imgFile) {
+      let basePath;
+      const fileName = imgFile.filename;
+
+      if (req.get('host').includes('10.0.2.2')) {
+        basePath = `${req.protocol}://${req
+          .get('host')
+          .replace('10.0.2.2', 'localhost')}/images/`;
+      } else {
+        basePath = `${req.protocol}://${req.get('host')}/images/`;
+      }
+
+      imageURL = basePath + fileName;
     }
 
     const spotData = await Spot.create({
       name,
       address,
       availableSpotNo,
+      type,
       latitude,
       longitude,
       phoneNo,
       email,
       price,
       description,
+      imageURL,
       userId: user._id,
     });
 
     if (spotData) {
       res.status(200);
       res.json({
-        _id: spotData.id,
-        name: spotData.name,
-        address: spotData.address,
-        latitude: spotData.latitude,
-        longitude: spotData.longitude,
-        email: spotData.email,
-        phoneNo: spotData.phoneNo,
-        price: spotData.price,
-        description: spotData.description,
-        userId: spotData.userId,
+        message: 'Spot created successfully.',
       });
     } else {
       res.status(400);
