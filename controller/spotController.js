@@ -33,6 +33,7 @@ const getSpotSearch = async (req, res) => {
   }
 };
 
+// Get data of spot for user who posted it.
 const getSpot = async (req, res) => {
   try {
     const userId = req.user.id;
@@ -40,6 +41,22 @@ const getSpot = async (req, res) => {
     const spotData = await Spot.find({ userId: userId });
 
     res.send({ spotData: spotData });
+  } catch (err) {
+    res.send({ errorMessage: err.message });
+  }
+};
+
+const getSpotType = async (req, res) => {
+  try {
+    const { type } = req.params;
+
+    const typeWiseData = await Spot.find({ type: getCapitalizedString(type) });
+
+    if (!typeWiseData) {
+      throw new Error(`No any spot found for type ${type}`);
+    } else {
+      res.json({ data: typeWiseData });
+    }
   } catch (err) {
     res.send({ errorMessage: err.message });
   }
@@ -115,7 +132,7 @@ const addSpot = async (req, res) => {
       name,
       address,
       availableSpotNo,
-      type,
+      type: getCapitalizedString(type),
       latitude,
       longitude,
       phoneNo,
@@ -204,4 +221,11 @@ const deleteSpot = async (req, res) => {
   }
 };
 
-module.exports = { addSpot, updateSpot, deleteSpot, getSpot, getSpotSearch };
+module.exports = {
+  addSpot,
+  updateSpot,
+  deleteSpot,
+  getSpot,
+  getSpotSearch,
+  getSpotType,
+};

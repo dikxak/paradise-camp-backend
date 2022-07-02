@@ -10,6 +10,7 @@ const {
   deleteSpot,
   getSpot,
   getSpotSearch,
+  getSpotType,
 } = require('../controller/spotController');
 
 // Adding Location
@@ -18,5 +19,6 @@ router.route('/add').post(userGuard, upload.single('img'), addSpot);
 router.route('/update/:id').put(userGuard, updateSpot);
 router.route('/delete/:id').delete(userGuard, deleteSpot);
 router.get('/search/:name', getSpotSearch);
+router.get('/type=:type', getSpotType);
 
 module.exports = router;
