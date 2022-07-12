@@ -11,10 +11,12 @@ const {
   getSpot,
   getSpotSearch,
   getSpotType,
+  getAllSpots,
 } = require('../controller/spotController');
 
 // Adding Location
 router.route('/').get(userGuard, getSpot);
+router.route('/all').get(getAllSpots);
 router.route('/add').post(userGuard, upload.single('img'), addSpot);
 router.route('/update/:id').put(userGuard, updateSpot);
 router.route('/delete/:id').delete(userGuard, deleteSpot);
