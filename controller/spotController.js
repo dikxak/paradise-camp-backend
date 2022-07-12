@@ -62,6 +62,16 @@ const getSpotType = async (req, res) => {
   }
 };
 
+const getAllSpots = async (req, res) => {
+  try {
+    const allSpots = await Spot.find({});
+
+    res.json({ data: allSpots.slice(0, 5) });
+  } catch (err) {
+    res.send({ errorMessage: err.message });
+  }
+};
+
 const addSpot = async (req, res) => {
   try {
     const user = req.user;
@@ -228,4 +238,5 @@ module.exports = {
   getSpot,
   getSpotSearch,
   getSpotType,
+  getAllSpots,
 };
