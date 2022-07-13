@@ -19,6 +19,10 @@ const BlogModel = new mongoose.Schema({
   imageURL: {
     type: String,
   },
+  authorName: {
+    type: String,
+    required: true,
+  },
   userId: {
     type: mongoose.Types.ObjectId,
     required: true,
