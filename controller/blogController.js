@@ -2,6 +2,17 @@ const Blog = require('../models/blogModel');
 
 const User = require('../models/userModel');
 
+const getAllBlogs = async (req, res) => {
+  try {
+    const data = await Blog.find({});
+    if (data) {
+      res.json({ data });
+    } else {
+      throw new Error('Failed to fetch data from database.');
+    }
+  } catch (err) {}
+};
+
 const getBlog = async (req, res) => {
   try {
     const userId = req.user.id;
@@ -23,11 +34,12 @@ const addBlog = async (req, res) => {
       throw new Error('User not authorized.');
     }
 
-    const { title, description, writtenDate, subtitle } = req.body;
+    const { title, subtitle, description } = req.body;
+    const { firstName, lastName } = await User.findById(user._id);
 
     const imgFile = req.file;
 
-    if (!title || !description || !writtenDate) {
+    if (!title || !description || !subtitle) {
       res.status(400);
       throw new Error('Please fill the required fields.');
     }
@@ -54,9 +66,10 @@ const addBlog = async (req, res) => {
     const blogData = await Blog.create({
       title,
       description,
-      writtenDate,
+      writtenDate: new Date().toISOString(),
       subtitle,
       imageURL,
+      authorName: `${firstName} ${lastName}`,
       userId: req.user.id,
     });
 
@@ -138,4 +151,4 @@ const deleteBlog = async (req, res) => {
   }
 };
 
-module.exports = { getBlog, addBlog, updateBlog, deleteBlog };
+module.exports = { getAllBlogs, getBlog, addBlog, updateBlog, deleteBlog };
