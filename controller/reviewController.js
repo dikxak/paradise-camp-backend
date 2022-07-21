@@ -26,14 +26,14 @@ const getReviewUser = async (req, res) => {
 
 const getAllReviews = async (req, res) => {
   try {
-    const spotId = req.body.spotId;
+    const { id } = req.params;
 
-    if (!spotId) {
+    if (!id) {
       res.status(400);
       throw new Error('No any spot.');
     }
 
-    const reviews = await Review.find({ spotId: spotId });
+    const reviews = await Review.find({ spotId: id });
 
     const reviewData = [];
 
@@ -49,6 +49,7 @@ const getAllReviews = async (req, res) => {
       }
 
       reviewData.push({
+        id: review._id,
         reviewText: review.text,
         reviewedDate: review.reviewedDate,
         userFullName: `${userData.firstName} ${userData.lastName}`,
@@ -71,21 +72,21 @@ const addReview = async (req, res) => {
     throw new Error('User not authorized.');
   }
 
-  const { text, reviewedDate, spotId } = req.body;
+  const { text, spotId } = req.body;
 
   if (!spotId) {
     res.status(400);
     throw new Error('No any spot.');
   }
 
-  if (!text || !reviewedDate) {
+  if (!text) {
     res.status(400);
     throw new Error('Please fill all the fields.');
   }
 
   const reviewData = await Review.create({
     text,
-    reviewedDate,
+    reviewedDate: new Date().toISOString(),
     userId: user.id,
     spotId,
   });
