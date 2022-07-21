@@ -35,30 +35,11 @@ const getAllReviews = async (req, res) => {
 
     const reviews = await Review.find({ spotId: id });
 
-    const reviewData = [];
+    if (!reviews) throw new Error('Error while getting reviews!');
 
-    if (reviews.length === 0) {
-      res.json({ reviewData: reviewData });
-    }
+    console.log(reviews);
 
-    reviews.forEach(async (review, i) => {
-      const userData = await User.findById(review.userId);
-
-      if (!userData) {
-        throw new Error('No user found.');
-      }
-
-      reviewData.push({
-        id: review._id,
-        reviewText: review.text,
-        reviewedDate: review.reviewedDate,
-        userFullName: `${userData.firstName} ${userData.lastName}`,
-      });
-
-      if (i === reviews.length - 1) {
-        res.json({ reviewData: reviewData });
-      }
-    });
+    res.send({ reviewData: reviews });
   } catch (err) {
     res.json({ errorMessage: err.message });
   }
@@ -84,11 +65,14 @@ const addReview = async (req, res) => {
     throw new Error('Please fill all the fields.');
   }
 
+  const { firstName, lastName } = await User.findById(user.id);
+
   const reviewData = await Review.create({
     text,
     reviewedDate: new Date().toISOString(),
     userId: user.id,
     spotId,
+    userFullName: `${firstName} ${lastName}`,
   });
 
   res.json({ reviewData: reviewData });
