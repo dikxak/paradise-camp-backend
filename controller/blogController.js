@@ -2,6 +2,20 @@ const Blog = require('../models/blogModel');
 
 const User = require('../models/userModel');
 
+const getBlog = async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    const data = await Blog.findById(id);
+
+    if (!data) throw new Error('No Blog Found!');
+
+    res.json({ data });
+  } catch (err) {
+    res.json({ errorMessage: err.message });
+  }
+};
+
 const getAllBlogs = async (req, res) => {
   try {
     const data = await Blog.find({});
@@ -13,7 +27,7 @@ const getAllBlogs = async (req, res) => {
   } catch (err) {}
 };
 
-const getBlog = async (req, res) => {
+const getBlogUser = async (req, res) => {
   try {
     const userId = req.user.id;
 
@@ -151,4 +165,11 @@ const deleteBlog = async (req, res) => {
   }
 };
 
-module.exports = { getAllBlogs, getBlog, addBlog, updateBlog, deleteBlog };
+module.exports = {
+  getBlog,
+  getAllBlogs,
+  getBlogUser,
+  addBlog,
+  updateBlog,
+  deleteBlog,
+};
