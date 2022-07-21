@@ -124,9 +124,31 @@ const updateBlog = async (req, res) => {
       throw new Error('User Not Authorized');
     }
 
-    const updatedBlog = await Blog.findByIdAndUpdate(blogId, req.body, {
-      new: true,
-    });
+    const imgFile = req.file;
+    let imageURL;
+
+    if (imgFile) {
+      let basePath;
+      const fileName = imgFile.filename;
+
+      if (req.get('host').includes('10.0.2.2')) {
+        basePath = `${req.protocol}://${req
+          .get('host')
+          .replace('10.0.2.2', 'localhost')}/images/`;
+      } else {
+        basePath = `${req.protocol}://${req.get('host')}/images/`;
+      }
+
+      imageURL = basePath + fileName;
+    }
+
+    const updatedBlog = await Blog.findByIdAndUpdate(
+      blogId,
+      { ...req.body, imageURL },
+      {
+        new: true,
+      }
+    );
 
     res.status(200).json(updatedBlog);
   } catch (err) {
