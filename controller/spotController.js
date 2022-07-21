@@ -33,8 +33,26 @@ const getSpotSearch = async (req, res) => {
   }
 };
 
-// Get data of spot for user who posted it.
 const getSpot = async (req, res) => {
+  try {
+    const id = req.params.id;
+
+    const spotData = await Spot.findById(id);
+    const { firstName, lastName } = await User.findById(spotData.userId);
+
+    const data = {
+      ...spotData._doc,
+      authorName: `${firstName} ${lastName}`,
+    };
+
+    res.send({ spotData: data });
+  } catch (err) {
+    res.send({ errorMessage: err.message });
+  }
+};
+
+// Get data of spot for user who posted it.
+const getSpotUser = async (req, res) => {
   try {
     const userId = req.user.id;
 
@@ -50,7 +68,7 @@ const getSpotType = async (req, res) => {
   try {
     const { type } = req.params;
 
-    const typeWiseData = await Spot.find({ type: getCapitalizedString(type) });
+    const typeWiseData = await Spot.find({ type: type });
 
     if (!typeWiseData) {
       throw new Error(`No any spot found for type ${type}`);
@@ -235,8 +253,9 @@ module.exports = {
   addSpot,
   updateSpot,
   deleteSpot,
-  getSpot,
+  getSpotUser,
   getSpotSearch,
   getSpotType,
   getAllSpots,
+  getSpot,
 };
