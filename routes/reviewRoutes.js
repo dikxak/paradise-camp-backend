@@ -11,9 +11,9 @@ const {
   deleteReview,
 } = require('../controller/reviewController');
 
+router.get('/get/all/:id', getAllReviews);
 router.route('/add').post(userGuard, addReview);
 router.route('/get/user').get(userGuard, getReviewUser);
-router.get('/get/all', getAllReviews);
 router.route('/update/:id').put(userGuard, updateReview);
 router.route('/delete/:id').delete(userGuard, deleteReview);
 
