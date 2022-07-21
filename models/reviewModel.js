@@ -17,6 +17,10 @@ const reviewModel = mongoose.Schema({
     type: Date,
     required: true,
   },
+  userFullName: {
+    type: String,
+    required: true,
+  },
 });
 
 module.exports = mongoose.model('Review', reviewModel);
