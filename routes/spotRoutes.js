@@ -13,13 +13,15 @@ const {
   getSpotType,
   getAllSpots,
   getSpot,
+  getAllCoords,
 } = require('../controller/spotController');
 
 // Adding Location
+router.route('/all').get(getAllSpots);
+router.route('/all/coords').get(getAllCoords);
 router.route('/type=:type').get(getSpotType);
 router.route('/:id').get(userGuard, getSpot);
 router.route('/me').get(userGuard, getSpotUser);
-router.route('/all').get(getAllSpots);
 router.route('/add').post(userGuard, upload.single('img'), addSpot);
 router.route('/update/:id').put(userGuard, upload.single('img'), updateSpot);
 router.route('/delete/:id').delete(userGuard, deleteSpot);
