@@ -84,7 +84,19 @@ const getAllSpots = async (req, res) => {
   try {
     const allSpots = await Spot.find({});
 
-    res.json({ data: allSpots.slice(0, 5) });
+    res.json({ data: allSpots });
+  } catch (err) {
+    res.send({ errorMessage: err.message });
+  }
+};
+
+const getAllCoords = async (req, res) => {
+  try {
+    const allCoords = await Spot.find({}, 'latitude longitude name');
+
+    if (!allCoords) throw new Error('Error while fetching data!');
+
+    if (allCoords) res.send({ allCoords: allCoords });
   } catch (err) {
     res.send({ errorMessage: err.message });
   }
@@ -284,4 +296,5 @@ module.exports = {
   getSpotType,
   getAllSpots,
   getSpot,
+  getAllCoords,
 };
