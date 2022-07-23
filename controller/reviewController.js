@@ -37,8 +37,6 @@ const getAllReviews = async (req, res) => {
 
     if (!reviews) throw new Error('Error while getting reviews!');
 
-    console.log(reviews);
-
     res.send({ reviewData: reviews });
   } catch (err) {
     res.json({ errorMessage: err.message });
