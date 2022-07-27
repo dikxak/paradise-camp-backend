@@ -48,4 +48,28 @@ const getBookings = async (req, res) => {
   }
 };
 
-module.exports = { bookSpot, getBookings };
+const getBookingsSpot = async (req, res) => {
+  try {
+    const userId = req.user._id;
+
+    if (!userId) throw new Error('User not authorized.');
+
+    const spotData = await Spot.find({ userId: userId });
+
+    const finalData = [];
+
+    if (spotData.length === 0) return res.json({ data: spotData });
+
+    spotData.forEach(async (data, i) => {
+      const bookingData = await Booking.find({ spotId: data._id });
+
+      finalData.push({ data: bookingData });
+
+      if (i === spotData.length - 1) return res.json({ data: finalData });
+    });
+  } catch (err) {
+    console.error(err);
+  }
+};
+
+module.exports = { bookSpot, getBookings, getBookingsSpot };
