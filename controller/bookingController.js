@@ -22,6 +22,7 @@ const bookSpot = async (req, res) => {
       userId,
       spotId,
       date: bookingDate,
+      spotData: spotData[0],
     });
 
     if (bookingData) return res.json({ bookingData: bookingData });
@@ -31,7 +32,7 @@ const bookSpot = async (req, res) => {
   }
 };
 
-const getSpot = async (req, res) => {
+const getBookings = async (req, res) => {
   try {
     const userId = req.user._id;
 
@@ -39,17 +40,12 @@ const getSpot = async (req, res) => {
 
     const bookingData = await Booking.find({ userId: userId });
 
-    const bookings = [];
-    bookingData.forEach(async (booking, i) => {
-      const bookedLocation = await Spot.find({ _id: booking.spotId });
-      bookings.push(bookedLocation[0]);
+    if (!bookingData) throw new Error('Error while getting bookings data.');
 
-      // If last item is also there, then only send the response.
-      if (i === bookingData.length - 1) res.json(bookings);
-    });
+    res.json({ bookingData });
   } catch (err) {
     res.json({ errorMessage: err.message });
   }
 };
 
-module.exports = { bookSpot, getSpot };
+module.exports = { bookSpot, getBookings };

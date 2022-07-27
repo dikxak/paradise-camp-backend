@@ -3,9 +3,9 @@ const router = new express.Router();
 
 const { userGuard } = require('../auth/auth');
 
-const { bookSpot, getSpot } = require('../controller/bookingController');
+const { bookSpot, getBookings } = require('../controller/bookingController');
 
 router.route('/').post(userGuard, bookSpot);
-router.route('/get').get(userGuard, getSpot);
+router.route('/get').get(userGuard, getBookings);
 
 module.exports = router;
