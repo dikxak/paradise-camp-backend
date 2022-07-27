@@ -63,7 +63,7 @@ const getBookingsSpot = async (req, res) => {
     spotData.forEach(async (data, i) => {
       const bookingData = await Booking.find({ spotId: data._id });
 
-      finalData.push({ data: bookingData });
+      finalData.push({ spotData, data: bookingData });
 
       if (i === spotData.length - 1) return res.json({ data: finalData });
     });
