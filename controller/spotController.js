@@ -45,7 +45,7 @@ const getSpot = async (req, res) => {
       authorName: `${firstName} ${lastName}`,
     };
 
-    res.send({ spotData: data });
+    res.json({ spotData: data });
   } catch (err) {
     res.send({ errorMessage: err.message });
   }
@@ -58,7 +58,7 @@ const getSpotUser = async (req, res) => {
 
     const spotData = await Spot.find({ userId: userId });
 
-    res.send({ spotData: spotData });
+    res.send({ data: spotData });
   } catch (err) {
     res.send({ errorMessage: err.message });
   }

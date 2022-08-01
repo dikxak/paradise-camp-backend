@@ -10,7 +10,7 @@ const getBlog = async (req, res) => {
 
     if (!data) throw new Error('No Blog Found!');
 
-    res.json({ data });
+    res.json({ blogData: data });
   } catch (err) {
     res.json({ errorMessage: err.message });
   }
@@ -33,7 +33,7 @@ const getBlogUser = async (req, res) => {
 
     const blogData = await Blog.find({ userId: userId });
 
-    res.send({ blogData: blogData });
+    res.send({ data: blogData });
   } catch (err) {
     res.send({ errorMessage: err.message, stack: err.stack });
   }

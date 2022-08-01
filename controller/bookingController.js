@@ -4,11 +4,10 @@ const Spot = require('../models/spotModel');
 const bookSpot = async (req, res) => {
   try {
     const userId = req.user.id;
-    const { bookingDate, spotId } = req.body;
+    const { date, spotId } = req.body;
 
     if (!userId) throw new Error('User is not authorized.');
-    if (!spotId || !bookingDate)
-      throw new Error('No any spot chosen for booking.');
+    if (!spotId || !date) throw new Error('No any spot chosen for booking.');
 
     const spotData = await Spot.find({ _id: spotId });
 
@@ -21,7 +20,7 @@ const bookSpot = async (req, res) => {
     const bookingData = await Booking.create({
       userId,
       spotId,
-      date: bookingDate,
+      date,
       spotData: spotData[0],
     });
 
